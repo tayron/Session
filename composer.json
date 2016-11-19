@@ -1,0 +1,22 @@
+{
+    "name": "tayron/session",
+    "description": "Classe para manipulação de sessão no PHP",
+    "version": "1.0.0",
+    "type": "classe-utilitaria",
+    "homepage": "https://github.com/tayron/session",
+    "authors": [
+        {
+            "name": "Tayron Miranda",
+            "email": "dev@tayron.com.br"
+        }
+    ],    
+    "require": {
+        "php": ">=5.4"       
+    },
+    "autoload": {
+        "psr-4": {
+            "Tayron\\": "\\"
+        }
+    }      
+
+}
