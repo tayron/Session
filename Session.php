@@ -125,10 +125,15 @@ class Session implements \SessionHandlerInterface
     public function gc($maxlifetime) 
     {
         $sessionStart = $this->read('session_start');
-        $dateTimeNow = new \DateTime();
-        $time = $dateTimeNow->diff($sessionStart);
+        
+        if($sessionStart === null){
+            $this->renew();            
+        }else{
+            $dateTimeNow = new \DateTime();
+            $time = $dateTimeNow->diff($sessionStart);
 
-        ($time->i >= $maxlifetime) ? $this->close() : $this->renew();
+            ($time->i >= $maxlifetime) ? $this->close() : $this->renew();            
+        }
 
         return true;
     }
