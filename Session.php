@@ -123,7 +123,7 @@ class Session implements \SessionHandlerInterface
     public function gc($maxlifetime) 
     {
         $sessionStart = $this->read('session_start');
-        $dateTimeNow = new \DateTime('now', new \DateTimeZone('America/Sao_Paulo'));
+        $dateTimeNow = new \DateTime('now'));
         $time = $dateTimeNow->diff($sessionStart);
 
         ($time->i >= $maxlifetime) ? $this->close() : $this->renew();
