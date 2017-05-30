@@ -106,10 +106,8 @@ class Session implements \SessionHandlerInterface
 
         if (!$this->debug()) {
             $this->write('session_id', session_id());
-            $this->write('session_start', new \DateTime());
+            $this->write('session_start', new \DateTime('now'));
         }
-
-        $this->gc($this->maxlifetime);
     }
 
     /**
@@ -125,15 +123,10 @@ class Session implements \SessionHandlerInterface
     public function gc($maxlifetime) 
     {
         $sessionStart = $this->read('session_start');
-        
-        if($sessionStart === null){
-            $this->renew();            
-        }else{
-            $dateTimeNow = new \DateTime();
-            $time = $dateTimeNow->diff($sessionStart);
+        $dateTimeNow = new \DateTime('now', new \DateTimeZone('America/Sao_Paulo'));
+        $time = $dateTimeNow->diff($sessionStart);
 
-            ($time->i >= $maxlifetime) ? $this->close() : $this->renew();            
-        }
+        ($time->i >= $maxlifetime) ? $this->close() : $this->renew();
 
         return true;
     }
@@ -149,7 +142,7 @@ class Session implements \SessionHandlerInterface
      * @return boolean Retorna true em caso de sucesso
      */
     public function write($sessionId, $sessionData) 
-    {
+    {   
         if (empty($sessionId)) {
             throw new InvalidArgumentException('Deve-se informar um indentificador para o valor a ser armazenado');
         }
@@ -158,7 +151,16 @@ class Session implements \SessionHandlerInterface
             throw new InvalidArgumentException('Deve-se informar um valor para o indentificador informado');
         }
 
-        $_SESSION[$sessionId] = $sessionData;
+        $listSessionId = explode('.', $sessionId);
+        $countKeys = count($listSessionId);
+        
+        if($countKeys == 2){
+            $_SESSION[$listSessionId[0]][$listSessionId[1]] = $sessionData;
+        }else if($countKeys == 2){
+            $_SESSION[$listSessionId[0]][$listSessionId[1]][$listSessionId[2]] = $sessionData;
+        }else{        
+            $_SESSION[$sessionId] = $sessionData;
+        }
 
         return ($this->read($sessionId)) ? true : false;
     }
@@ -173,7 +175,20 @@ class Session implements \SessionHandlerInterface
      */
     public function read($sessionId) 
     {
-        return (isset($_SESSION[$sessionId])) ? $_SESSION[$sessionId] : null;
+        $listSessionId = explode('.', $sessionId);
+        $countKeys = count($listSessionId);
+        
+        if($countKeys == 2){
+            return (isset($_SESSION[$listSessionId[0]][$listSessionId[1]])) 
+                ? $_SESSION[$listSessionId[0]][$listSessionId[1]] 
+                : null;
+        }else if($countKeys == 3){
+            return (isset($_SESSION[$listSessionId[0]][$listSessionId[1]][$listSessionId[2]])) 
+                ? $_SESSION[$listSessionId[0]][$listSessionId[1]][$listSessionId[2]] 
+                : null;            
+        }else{        
+            return (isset($_SESSION[$sessionId])) ? $_SESSION[$sessionId] : null;
+        }        
     }
 
     /**
@@ -265,6 +280,6 @@ class Session implements \SessionHandlerInterface
      */
     private function renew() 
     {
-        $this->write('session_start', new \DateTime());
+        $this->write('session_start', new \DateTime('now'));
     }
 }
