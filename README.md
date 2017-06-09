@@ -1,4 +1,4 @@
-## Session 1.0.1
+## Session
 
 Classe para manipulação de sessão no PHP
 
@@ -20,7 +20,7 @@ Classe para manipulação de sessão no PHP
 ```sh
     "require": {
         ...
-        "tayron/session" : "1.0.1"
+        "tayron/session" : "dev-master"
         ... 
     },    
 ```
