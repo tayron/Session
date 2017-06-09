@@ -1,7 +1,7 @@
 {
     "name": "tayron/session",
     "description": "Classe para manipulação de sessão no PHP",
-    "version": "1.0.1",
+    "version": "1.0.0",
     "type": "classe-utilitaria",
     "homepage": "https://github.com/tayron/session",
     "authors": [
