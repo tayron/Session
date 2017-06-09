@@ -20,7 +20,7 @@ Classe para manipulação de sessão no PHP
 ```sh
     "require": {
         ...
-        "tayron/session" : "dev-master"
+        "tayron/session" : "1.0.0"
         ... 
     },    
 ```
